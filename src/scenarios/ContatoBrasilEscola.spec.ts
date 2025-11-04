@@ -4,7 +4,7 @@ import { TheConfig } from 'sicolo';
 import { ai } from '@zerostep/playwright';
 import BrasilEscolaPage from '../support/pages/BrasilEscolaPage';
 
-test.describe('Testes funcionais no site do Brasil Escola', () => {
+test.describe('Testes no site do Brasil Escola', () => {
   const CONFIG = join(__dirname, '../support/fixtures/config.yml');
   const BASE_URL = TheConfig.fromFile(CONFIG)
     .andPath('application.brasil_escola')
@@ -18,28 +18,31 @@ test.describe('Testes funcionais no site do Brasil Escola', () => {
     await page.goto(BASE_URL);
   });
 
-  test('Validar funcionalidade de formulário Fale Conosco', async () => {
+  test('Deve enviar o formulário corretamente', async () => {
     await brasilEscolaPage.preencherCamposValidos();
     await brasilEscolaPage.enviarFormulario();
     await brasilEscolaPage.validarEnvio();
   });
 
-  test('Não deve enviar com campo obrigatório "Nome" vazio', async () => {
+  test('Não deve enviar o formulário com campo obrigatório "Nome" vazio', async () => {
+    await brasilEscolaPage.preencherCamposValidos();
     await brasilEscolaPage.preencherCampoNomeVazio();
     await brasilEscolaPage.enviarFormulario();
     await brasilEscolaPage.validarCampoVazio();
   });
 
-  test('Não deve enviar com campo "E-mail" inválido usando zerostep', async ({
+  test('Não deve enviar o formulário com campo obrigatório "Nome" vazio (zerostep)', async ({
     page
   }) => {
-    const aiArgs = { page, test };
+    const options = { page, test };
 
     await page.goto('https://brasilescola.uol.com.br/contato');
 
-    await ai('fill "E-mail*" with "email invalido"', aiArgs);
-    await ai('click the "ENVIAR" button', aiArgs);
+    await ai('fill "Assunto" with any text', options);
+    await ai('fill "Email" with a valid email', options);
+    await ai('select any option in "Enviar para"', options);
+    await ai('fill "Mensagem" with a valid message', options);
 
-    await brasilEscolaPage.validarEmailInvalido();
+    await brasilEscolaPage.validarCampoVazio();
   });
 });
