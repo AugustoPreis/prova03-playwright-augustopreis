@@ -31,18 +31,14 @@ test.describe('Testes no site do Brasil Escola', () => {
     await brasilEscolaPage.validarCampoVazio();
   });
 
-  test('Não deve enviar o formulário com campo obrigatório "Nome" vazio (zerostep)', async ({
+  test('Não deve enviar o formulário com os campos vazios (zerostep)', async ({
     page
   }) => {
     const options = { page, test };
 
     await page.goto('https://brasilescola.uol.com.br/contato');
 
-    await ai('fill "Assunto" with any text', options);
-    await ai('fill "Email" with a valid email', options);
-    await ai('select any option in "Enviar para"', options);
-    await ai('fill "Mensagem" with a valid message', options);
-
-    await brasilEscolaPage.validarCampoVazio();
+    await ai('Click in the "Enviar" button', options);
+    await ai('Check that there is no success message displayed on the screen', options);
   });
 });
