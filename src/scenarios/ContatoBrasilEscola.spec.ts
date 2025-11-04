@@ -7,7 +7,7 @@ import BrasilEscolaPage from '../support/pages/BrasilEscolaPage';
 test.describe('Testes funcionais no site do Brasil Escola', () => {
   const CONFIG = join(__dirname, '../support/fixtures/config.yml');
   const BASE_URL = TheConfig.fromFile(CONFIG)
-    .andPath('application.brasilescola')
+    .andPath('application.brasil_escola')
     .retrieveData();
 
   let brasilEscolaPage: BrasilEscolaPage;
